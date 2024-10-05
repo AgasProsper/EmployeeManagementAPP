@@ -1,0 +1,21 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name _;
+
+    # Health check endpoint
+    location /health {
+        default_type text/html;
+        return 200 "<!DOCTYPE html><p>Web Tier Health Check</p>\n";
+    }
+
+    # React app and front-end files
+    location / {
+        root    /usr/share/nginx/html;
+        index   index.html index.htm;
+        try_files $uri /index.html;
+    }
+
+    # Proxy for internal load balancer (API)
+
+}
