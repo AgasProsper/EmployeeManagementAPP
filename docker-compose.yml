@@ -1,0 +1,45 @@
+version: '3'
+services:
+  mysql_db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=mysql_db
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=admin
+    networks:
+      - java-network
+    restart: always
+    
+  backend-ems-api:
+    image: customer-managment-system-api
+    ports:
+      - "8082:8082"
+    env_file:
+      - .env
+    depends_on:
+      - mysql_db
+    restart: always
+    networks:
+      - java-network
+      
+  frontend-ems:
+    image: employee-managment-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend-ems-api
+      - mysql_db
+    networks:
+      - java-network
+  
+networks:
+  java-network:
+    name: jnetwork
+
+
+
+
+
